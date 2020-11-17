@@ -2,10 +2,10 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Nov 13, 2020 9:45:24 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1605257124972</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Nov 17, 2020 2:21:33 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1605619293047</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\zepho\Dropbox\Configurable_System_On_Chip\platformdesigner_tutorial\software\week1_practicum2_bsp</BspGeneratedLocation>
-        <BspSettingsFile>.\settings.bsp</BspSettingsFile>
+        <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\nios_system.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>nios2_qsys_0</Cpu>
@@ -900,43 +900,43 @@
         </Setting>
         <MemoryMap>
                 <slaveDescriptor>onchip_memory2_0</slaveDescriptor>
-                <addressRange>0x00000000 - 0x00000FFF</addressRange>
-                <addressSpan>4096</addressSpan>
+                <addressRange>0x00000000 - 0x0001F3FF</addressRange>
+                <addressSpan>128000</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>timer_0</slaveDescriptor>
-                <addressRange>0x00002000 - 0x0000201F</addressRange>
+                <addressRange>0x00021000 - 0x0002101F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>timer</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>HEX4_5</slaveDescriptor>
-                <addressRange>0x00002020 - 0x0000202F</addressRange>
+                <addressRange>0x00021020 - 0x0002102F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>HEX0_3</slaveDescriptor>
-                <addressRange>0x00002030 - 0x0000203F</addressRange>
+                <addressRange>0x00021030 - 0x0002103F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>switches</slaveDescriptor>
-                <addressRange>0x00002040 - 0x0000204F</addressRange>
+                <addressRange>0x00021040 - 0x0002104F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>LEDs</slaveDescriptor>
-                <addressRange>0x00002050 - 0x0000205F</addressRange>
+                <addressRange>0x00021050 - 0x0002105F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart_0</slaveDescriptor>
-                <addressRange>0x00002060 - 0x00002067</addressRange>
+                <addressRange>0x00021060 - 0x00021067</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>

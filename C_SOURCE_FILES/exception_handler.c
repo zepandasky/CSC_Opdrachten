@@ -1,7 +1,7 @@
-#include "nios2_ctrl_reg_macros.h"
 
+#include "nios2_ctrl_reg_macros.h"
 /* function prototypes */
-void main(void);
+int main(void);
 void interrupt_handler(void);
 void counterInterrupt(void);
 
@@ -128,7 +128,7 @@ void the_exception(void)
 void interrupt_handler(void) {
     int ipending;
     NIOS2_READ_IPENDING(ipending);
-    if (ipending & 0x6) // Interval timer interrupt is generated on level 6 as stated in the platform designer
+    if (ipending & 0x40) // Interval timer interrupt is generated on level 6 as stated in the platform designer
     {
         counterInterrupt();
     }

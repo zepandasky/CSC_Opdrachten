@@ -1,3 +1,4 @@
+
 #include "exception_handler.c"
 #include <stdio.h>
  
@@ -7,7 +8,7 @@
 */
 
 /*Hardware addresses defines*/
-#define INTERVAL_TIMER (int *) 0x0002000
+#define INTERVAL_TIMER (char *) 0x0002000
 #define hex4_5 (int *) 0x0002020    //int is big enough for 28 bits, int is 32
 #define hex0_3 (int *) 0x0002030
 #define switches (volatile int *) 0x0002040
@@ -64,12 +65,12 @@ int hex_to_7_seg (int hex_digit ) {
     if ( hex_digit == 0xD ) return 0x21 ;
     if ( hex_digit == 0xE ) return 0x06 ;
     if ( hex_digit == 0xF ) return 0x0E ;
-return 0x7F ;
+return 0x40 ;
 }
 
 void init_interrupt()
 {
-    volatile int * interval_timer_ptr = INTERVAL_TIMER;                    // interal timer base address
+    volatile int * interval_timer_ptr = (int *)INTERVAL_TIMER;                    // interal timer base address
 
     /* set the interval timer period for scrolling the LED lights 
 	/*Uitleg
@@ -91,15 +92,20 @@ void init_interrupt()
     /* set interrupt mask bits for levels 6 which is the defined interrupt generator for
     * the interval timer hardware
     */
-    NIOS2_WRITE_IENABLE(0x6);
-
+    NIOS2_WRITE_IENABLE(0x40);
     NIOS2_WRITE_STATUS(1); // enable Nios II interrupts
+    return;
 }
+
+
 
 //Zie testprogramma voor meer details
 //Interrupt triggered by the interval timer
-void counterInterrupt()
+void counterInterrupt(void)
 {
+    volatile int * interval_timer_ptr = (int *)INTERVAL_TIMER;
+    *(interval_timer_ptr) = 0;
+
     intCounter++;
     if(intCounter > 999999) intCounter = 0; //6 seven segments displays
     char *intCounterHex;
@@ -107,11 +113,14 @@ void counterInterrupt()
 
     //elke charachter uit intCounterHex staat gelijk aan een getal op de hex display
     int i = 0;
-    while(intCounterHex != 0 || i > MAX_HEX_SIZE-1){
+    //|| i > MAX_HEX_SIZE-1
+    while(i < 6){
         write7SegDisplay(intCounterHex[i], i);
         i++;
     }
+    return;
 }
+
 
 void write7SegDisplay(char displayValue, int displayNumber)
 {
@@ -124,18 +133,21 @@ void write7SegDisplay(char displayValue, int displayNumber)
      * De hexto7Seg returned het getal wat nodig is om de goede bits van het hex display aan te sturen
      * Maar je wilt dit naar een specifiek gedeelte van de 28 bits schrijven, de 1e 7 = hex0 daarna hex1 etc. dit kan doormiddel van een mask(0x7F)
      */
+
+
+
     if(displayNumber == 0)
-        *hex0_3 = (segInput & 0x7F);
+        *hex0_3 = (segInput);
     if(displayNumber == 1)
-        *hex0_3 = (segInput & 0x3F80);
+        *hex0_3 = ((segInput << 7) | *hex0_3);  
     if(displayNumber == 2)
-        *hex0_3 = (segInput & 0x1FC000);
+        *hex0_3 = ((segInput << 14) | *hex0_3);
     if(displayNumber == 3)
-        *hex0_3 = (segInput & 0XFE00000);
+        *hex0_3 = ((segInput << 21) | *hex0_3);
     if(displayNumber == 4)
-        *hex4_5 = (segInput & 0x7F);
+        *hex4_5 = (segInput);
     if(displayNumber == 5)
-        *hex4_5 = (segInput & 0x3F80);
+        *hex4_5 = ((segInput << 7) | *hex4_5);
 }
 
 char* dec2ToHex(int decimalnum)
@@ -161,8 +173,10 @@ char* dec2ToHex(int decimalnum)
     return hexadecimalnum;
 }
 
-void main()
+int main()
 { 
+    *hex0_3 = 0;
+    *hex4_5 = 0;
 	init_interrupt();
     while(1);
 }

@@ -26,6 +26,8 @@ ARCHITECTURE lights_rtl OF lights IS
         );
 END COMPONENT;
 
+
+
 BEGIN
 	NiosII : nios_system
 	PORT MAP(
