@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_qsys_0' in SOPC Builder design 'nios_system'
  * SOPC Builder design path: ../../nios_system.sopcinfo
  *
- * Generated: Tue Nov 17 14:21:33 CET 2020
+ * Generated: Tue Nov 17 23:17:33 CET 2020
  */
 
 /*
@@ -342,7 +342,7 @@
 #define TIMER_0_COUNTER_SIZE 32
 #define TIMER_0_FIXED_PERIOD 0
 #define TIMER_0_FREQ 50000000
-#define TIMER_0_IRQ 6
+#define TIMER_0_IRQ 4
 #define TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define TIMER_0_LOAD_VALUE 49999
 #define TIMER_0_MULT 0.001

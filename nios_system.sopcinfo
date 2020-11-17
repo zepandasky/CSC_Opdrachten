@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="nios_system" kind="nios_system" version="1.0" fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2020.11.17.14:16:40 -->
+ <!-- 2020.11.17.23:06:10 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1605619000</value>
+  <value>1605650770</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -4706,7 +4706,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="internalIrqMaskSystemInfo">
    <type>long</type>
-   <value>96</value>
+   <value>48</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -5703,7 +5703,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>timer_0</moduleName>
     <slaveName>irq</slaveName>
     <name>timer_0.irq</name>
-    <interruptNumber>6</interruptNumber>
+    <interruptNumber>4</interruptNumber>
    </interrupt>
   </interface>
   <interface name="jtag_debug_module_reset" kind="reset_source" version="18.1">
@@ -9414,7 +9414,7 @@ parameters are a RESULT of the module parameters. -->
    end="timer_0.irq">
   <parameter name="irqNumber">
    <type>int</type>
-   <value>6</value>
+   <value>4</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>

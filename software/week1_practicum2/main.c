@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <system.h>
+#include <string.h>
 #include "HAL\inc\sys\alt_irq.h"
 #include "drivers\inc\altera_avalon_pio_regs.h"
 #include "drivers\inc\altera_avalon_timer_regs.h"
+#include "drivers\inc\altera_avalon_jtag_uart_regs.h"
 
 /*Function definitions*/
 void write7SegDisplay(char, int);
 void counterInterrupt(void* isr_context);
+void jtagInterrupt (void* isr_context);
 char* dec2ToHex(int);
 
 
@@ -15,18 +18,15 @@ char* dec2ToHex(int);
 
 /*Global variable declarations*/
 volatile int intCounter = 0;
+volatile int noPara;
+volatile int flags;
+volatile int noPara1;
+volatile int flags1;
 
 //Convert a char hexadecimal character to its corresponding int value
 int charToInt(char convert)
 {
-//    int result = convert - 48;
-//    if((result <= 9 )&& (result >= 0)){
-//    	return result;
-//    }else{
-//    	return (int)convert-55;	//if char is 'A' == 65 decimal so 65-55 is = 10 decimal is the decimal value of 0xA
-//    }
-
-    switch(convert){
+	switch(convert){
         case '0' : return 0; break;
         case '1' : return 1; break;
         case '2' : return 2; break;
@@ -67,39 +67,41 @@ int hex_to_7_seg (int hex_digit ) {
 return 0x7F ;
 }
 
-volatile int noPara;
-volatile int flags;
-
 void init_interrupt(){
-		/*Set callback function abnd enable interrupts*/
-		//bits 15:0 periodl
+		/*Set interrupt for interval timer*/
 		int counter	= 50000;	// 1/(50MHz) x (50000) = 1msec
-
-		//Write counter value to registers
 		IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_0_BASE, counter & 0xFFFF);
 		IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_0_BASE, (counter >> 16) & 0xFFFF);
 
-		void* isrPara = (void *) &noPara;
-		void* noFlags = (void *) &flags;
-		//uitzoeken wat void isr_context moet zijn en de flags
-		if(alt_ic_isr_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID,TIMER_0_IRQ, counterInterrupt, isrPara, noFlags)){
-		  printf("Error in ic_isr_register set callback");
-		}
-
 		//Set control register bits
 		IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_0_BASE, 0x7);
+		//Set control register bits, enable Write interrupts
+		IOWR_ALTERA_AVALON_JTAG_UART_CONTROL(JTAG_UART_0_BASE, 0x2);
 
-		/* set interrupt mask bits for levels 6 which is the defined interrupt generator for
-		* the interval timer hardware
-		*/
-		NIOS2_WRITE_IENABLE(0x40);
+		void* isrPara = (void *) &noPara;
+		void* noFlags = (void *) &flags;
+		void* isrPara1 = (void *) &noPara1;
+		void* noFlags1 = (void *) &flags1;
+		//uitzoeken wat void isr_context moet zijn en de flags
+		if(alt_ic_isr_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID,TIMER_0_IRQ, counterInterrupt, isrPara, noFlags) != 0){
+		  printf("Error in initializing interval timer interrupt");
+		}
+		/*Set jtag_uart interrupt */
+		if(alt_ic_isr_register(JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID,JTAG_UART_0_IRQ, jtagInterrupt, isrPara1, noFlags1) != 0){
+				  printf("Error in initializing jtag_uart interrupt");
+		}
 
-		NIOS2_WRITE_STATUS(1); // enable Nios II interrupts
+		alt_irq_cpu_enable_interrupts();
+		alt_ic_irq_enable(JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID,jtagInterrupt);
+		alt_ic_irq_enable(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, counterInterrupt);
+
 }
 
 /*Interrupt function */
 void counterInterrupt(void* isr_context)
 {
+	volatile int * interval_timer_ptr = (int *)TIMER_0_BASE;
+	*(interval_timer_ptr) = 0;
     intCounter++;
     if(intCounter > 999999) intCounter = 0; //6 seven segments displays
     char *intCounterHex;
@@ -111,6 +113,30 @@ void counterInterrupt(void* isr_context)
         write7SegDisplay(intCounterHex[i], i);
         i++;
     }
+}
+
+void jtagInterrupt(void* isr_context){
+	/*CLEAR THE FUCKING INTERRUPT*/
+	volatile int * jtagInterrupt = (int *)JTAG_UART_0_BASE;
+	*(jtagInterrupt) = 0;
+
+
+	int dataInt;
+	char data;
+	char completeData[] = "";
+	printf("test1");
+	do{
+		data = IORD_ALTERA_AVALON_JTAG_UART_DATA(JTAG_UART_0_BASE);
+		if(data == '\n')
+			break;
+		if (data & 0x00008000){   // check RVALID to see if there is new data
+			strncat(completeData,&data,1);
+		}
+	}while(data != '\n');
+
+	if(completeData == "start"){
+		printf("test");
+	}
 }
 
 void write7SegDisplay(char displayValue, int displayNumber)
@@ -167,8 +193,7 @@ int main()
   IOWR_ALTERA_AVALON_PIO_DATA(HEX0_3_BASE,0);
   IOWR_ALTERA_AVALON_PIO_DATA(HEX4_5_BASE,0);
   init_interrupt();
-  int SW_value = IORD_ALTERA_AVALON_PIO_DATA ( SWITCHES_BASE ) ;
-  IOWR_ALTERA_AVALON_PIO_DATA ( LEDS_BASE , SW_value ) ;
+
   while(1);
   return 0;
 }

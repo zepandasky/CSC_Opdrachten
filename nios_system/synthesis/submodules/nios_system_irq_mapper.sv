@@ -22,7 +22,7 @@
 // Parameters
 //   NUM_RCVRS        : 2
 //   SENDER_IRW_WIDTH : 32
-//   IRQ_MAP          : 0:5,1:6
+//   IRQ_MAP          : 0:5,1:4
 //
 // -------------------------------------------------------
 
@@ -53,7 +53,7 @@ module nios_system_irq_mapper
 	sender_irq = 0;
 
         sender_irq[5] = receiver0_irq;
-        sender_irq[6] = receiver1_irq;
+        sender_irq[4] = receiver1_irq;
     end
 
 endmodule
