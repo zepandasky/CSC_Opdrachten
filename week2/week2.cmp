@@ -1,0 +1,8 @@
+	component week2 is
+		port (
+			clk_clk                  : in  std_logic                     := 'X'; -- clk
+			reset_reset_n            : in  std_logic                     := 'X'; -- reset_n
+			to_hex_readdata_readdata : out std_logic_vector(31 downto 0)         -- readdata
+		);
+	end component week2;
+

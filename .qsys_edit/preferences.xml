@@ -8,7 +8,7 @@
    <name preferredWidth="280" />
   </columns>
  </systemtable>
- <library expandedCategories="Project,Library" />
+ <library expandedCategories="Project,Project/My Own IP Cores,Library" />
  <window width="1936" height="1056" x="-8" y="-8" />
  <generation synthesis="VHDL" block_symbol_file="0" path="" />
  <hdlexample language="VHDL" />

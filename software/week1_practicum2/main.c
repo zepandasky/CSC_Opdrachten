@@ -23,6 +23,8 @@ volatile int flags;
 volatile int noPara1;
 volatile int flags1;
 
+volatile int runTimer = 0;
+
 //Convert a char hexadecimal character to its corresponding int value
 int charToInt(char convert)
 {
@@ -84,11 +86,11 @@ void init_interrupt(){
 		void* noFlags1 = (void *) &flags1;
 		//uitzoeken wat void isr_context moet zijn en de flags
 		if(alt_ic_isr_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID,TIMER_0_IRQ, counterInterrupt, isrPara, noFlags) != 0){
-		  printf("Error in initializing interval timer interrupt");
+			printf("Error in initializing interval timer interrupt");
 		}
 		/*Set jtag_uart interrupt */
 		if(alt_ic_isr_register(JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID,JTAG_UART_0_IRQ, jtagInterrupt, isrPara1, noFlags1) != 0){
-				  printf("Error in initializing jtag_uart interrupt");
+			printf("Error in initializing jtag_uart interrupt");
 		}
 
 		alt_irq_cpu_enable_interrupts();
@@ -102,41 +104,39 @@ void counterInterrupt(void* isr_context)
 {
 	volatile int * interval_timer_ptr = (int *)TIMER_0_BASE;
 	*(interval_timer_ptr) = 0;
-    intCounter++;
-    if(intCounter > 999999) intCounter = 0; //6 seven segments displays
-    char *intCounterHex;
-    intCounterHex = dec2ToHex(intCounter);
 
-    //elke charachter uit intCounterHex staat gelijk aan een getal op de hex display
-    int i = 0;
-    while(i < 6){
-        write7SegDisplay(intCounterHex[i], i);
-        i++;
-    }
+	if(runTimer == 1){
+		intCounter++;
+		if(intCounter > 999999) intCounter = 0; //6 seven segments displays
+		char *intCounterHex;
+		intCounterHex = dec2ToHex(intCounter);
+
+		//elke charachter uit intCounterHex staat gelijk aan een getal op de hex display
+		int i = 0;
+		while(i < 6){
+			write7SegDisplay(intCounterHex[i], i);
+			i++;
+		}
+	}else if(runTimer == 0){
+		intCounter = 0;
+	}
 }
 
 void jtagInterrupt(void* isr_context){
-	/*CLEAR THE FUCKING INTERRUPT*/
-	volatile int * jtagInterrupt = (int *)JTAG_UART_0_BASE;
-	*(jtagInterrupt) = 0;
-
-
-	int dataInt;
 	char data;
-	char completeData[] = "";
-	printf("test1");
+	char completeData[10] = "";
+
 	do{
 		data = IORD_ALTERA_AVALON_JTAG_UART_DATA(JTAG_UART_0_BASE);
 		if(data == '\n')
 			break;
-		if (data & 0x00008000){   // check RVALID to see if there is new data
-			strncat(completeData,&data,1);
-		}
+		strncat(completeData,&data,1);
 	}while(data != '\n');
 
-	if(completeData == "start"){
-		printf("test");
-	}
+	if(!(strcmp (completeData,"start"))) //strcmp returns zero on succes
+		runTimer = 1;
+	if(!(strcmp (completeData,"stop")))
+		runTimer = 0;
 }
 
 void write7SegDisplay(char displayValue, int displayNumber)
@@ -167,7 +167,7 @@ void write7SegDisplay(char displayValue, int displayNumber)
 char* dec2ToHex(int decimalnum)
 {
     int quotient, remainder;
-    int i, j = 0;
+    int j = 0;
     static char hexadecimalnum[MAX_HEX_SIZE];
 
     for(int i = 0; i < MAX_HEX_SIZE; i++)
