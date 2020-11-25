@@ -162,7 +162,7 @@
    {
       datum baseAddress
       {
-         value = "131072";
+         value = "524288";
          type = "String";
       }
    }
@@ -277,8 +277,8 @@
   <parameter name="cpuID_stored" value="0" />
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
-  <parameter name="dataAddrWidth" value="19" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x20000' end='0x3F400' /><slave name='timer_0.s1' start='0x40020' end='0x40040' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x40048' end='0x40050' /><slave name='reg32_avalon_interface_0.avalon_slave_0_2' start='0x40050' end='0x40054' /><slave name='reg32_avalon_interface_0.avalon_slave_0_1' start='0x40054' end='0x40058' /><slave name='nios2_qsys_0.jtag_debug_module' start='0x40800' end='0x41000' /></address-map>]]></parameter>
+  <parameter name="dataAddrWidth" value="20" />
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='timer_0.s1' start='0x40020' end='0x40040' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x40048' end='0x40050' /><slave name='reg32_avalon_interface_0.avalon_slave_0_2' start='0x40050' end='0x40054' /><slave name='reg32_avalon_interface_0.avalon_slave_0_1' start='0x40054' end='0x40058' /><slave name='nios2_qsys_0.jtag_debug_module' start='0x40800' end='0x41000' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0xBE800' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -304,8 +304,8 @@
   <parameter name="icache_size" value="4096" />
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Tiny" />
-  <parameter name="instAddrWidth" value="19" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x20000' end='0x3F400' /><slave name='timer_0.s1' start='0x40020' end='0x40040' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x40048' end='0x40050' /><slave name='nios2_qsys_0.jtag_debug_module' start='0x40800' end='0x41000' /></address-map>]]></parameter>
+  <parameter name="instAddrWidth" value="20" />
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='timer_0.s1' start='0x40020' end='0x40040' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x40048' end='0x40050' /><slave name='nios2_qsys_0.jtag_debug_module' start='0x40800' end='0x41000' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0xBE800' /></address-map>]]></parameter>
   <parameter name="internalIrqMaskSystemInfo" value="96" />
   <parameter name="manuallyAssignCpuID" value="true" />
   <parameter name="mmu_TLBMissExcOffset" value="0" />
@@ -415,7 +415,7 @@
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="128000" />
+  <parameter name="memorySize" value="256000" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="resetrequest_enabled" value="true" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
@@ -486,7 +486,7 @@
    start="nios2_qsys_0.data_master"
    end="onchip_memory2_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00020000" />
+  <parameter name="baseAddress" value="0x00080000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -522,7 +522,7 @@
    start="nios2_qsys_0.instruction_master"
    end="onchip_memory2_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00020000" />
+  <parameter name="baseAddress" value="0x00080000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection

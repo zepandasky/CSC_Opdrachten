@@ -29,8 +29,9 @@ ARCHITECTURE Structure OF reg32_avalon_interface IS
 			);
 		END COMPONENT;
 BEGIN
-	to_reg <= writedata;
+	to_reg  <= writedata;
 	to_reg2 <= writedata2;
+	
 	WITH (chipselect AND write) SELECT
 		local_byteenable <= byteenable WHEN '1', "0000" WHEN OTHERS;
 	WITH (chipselect2 AND write2) SELECT

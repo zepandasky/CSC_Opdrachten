@@ -878,7 +878,7 @@
 												</leaf>
 											</node>
 											<node nodeId="1372710005725" orientation="VERTICAL" divider="0.75">
-												<node nodeId="1372710005727" orientation="HORIZONTAL" divider="0.6183193900785428">
+												<node nodeId="1372710005727" orientation="HORIZONTAL" divider="0.6011927785284795">
 													<node nodeId="1372710005733" orientation="VERTICAL" divider="0.75">
 														<leaf id="1" nodeId="1372710005735">
 															<placeholders>
@@ -1277,7 +1277,7 @@
 									<backup-path>
 										<node location="RIGHT" size="0.7781885397412199" id="1372710005721"/>
 										<node location="TOP" size="0.75" id="1372710005725"/>
-										<node location="RIGHT" size="0.38168060992145725" id="1372710005727"/>
+										<node location="RIGHT" size="0.3988072214715205" id="1372710005727"/>
 										<node location="TOP" size="0.6704331450094162" id="1389812802503"/>
 										<leaf id="1389812800464"/>
 									</backup-path>
